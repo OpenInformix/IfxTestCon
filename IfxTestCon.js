@@ -128,29 +128,37 @@ const Connectivitys = {
 
     for (let item in Connectivitys)
     {
+        isDrda = false;
         let ConnType = Connectivitys[item];
 
         switch (ConnType)
         {
             case Connectivitys.SQLI:
+                isDrda = false;
                 ConnStr = format(sqliConStr, conInfo);
+                // mTest.RunTest1(SqliConStr, isDrda);
                 break;
 
             case Connectivitys.SQLI_SSL:
+                isDrda = false;
                 ConnStr = format(sslConStr, conInfo);
+                // mTest.RunTest1(SqliConStr, isDrda);
                 break;
 
 
             case Connectivitys.DRDA:
+                isDrda = true;
                 ConnStr = " Connection string for DRDA"
+                // mTest.RunTest1(SqliConStr, isDrda);
                 break;
 
             case Connectivitys.DRDA_SSL:
+                isDrda = true;
                 ConnStr = " Connection string for DRDA SSL"
+                // mTest.RunTest1(SqliConStr, isDrda);
                 break;
         }
         console.log(ConnStr);
-        //mTest.RunTest1(SqliConStr);
     }
 
 }
