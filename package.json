@@ -1,14 +1,14 @@
 {
-  "name": "ifx-test-con",
+  "name": "ifx-test-conn",
   "version": "1.0.0",
   "description": "Basic Connectivity Test with Informix Database",
-  "main": "IfxTestCon.js",
+  "main": "BasicTest.js",
   "scripts": {
-    "test": "IfxTestCon"
+    "test": "BasicTest"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/OpenInformix/IfxTestCon.git"
+    "url": "https://github.com/OpenInformix/testconn.git"
   },
   "dependencies": {
     "ifxnjs": "~8.0.0",
