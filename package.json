@@ -1,0 +1,22 @@
+{
+  "name": "ifx-test-con",
+  "version": "1.0.0",
+  "description": "Basic Connectivity Test with Informix Database",
+  "main": "IfxTestCon.js",
+  "scripts": {
+    "test": "IfxTestCon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OpenInformix/IfxTestCon.git"
+  },
+  "dependencies": {
+    "ifxnjs": "~8.0.0"
+  },
+  "keywords": [
+    "node",
+    "Informix"
+  ],
+  "author": "Sathyanesh Krishnan",
+  "license": "MIT"
+}

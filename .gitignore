@@ -57,3 +57,8 @@ typings/
 # dotenv environment variables file
 .env
 
+# store temp output
+0.*
+1.*
+*.log
+tmp.*
