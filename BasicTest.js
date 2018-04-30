@@ -1,13 +1,10 @@
 
-var format = require("string-template")
 var ifxobj = require('ifxnjs');
+const util = require('util');
 
-
-
-
-class CBasicTest 
+class CBasicTest
 {
-    constructor() {  }
+    constructor() { }
 
     DirExec(dbCon, ErrIgn, sql)
     {
@@ -27,15 +24,15 @@ class CBasicTest
         }
     }
 
-    DoSomeWork(err, dbCon)
+    DoSomeWork(dbCon)
     {
-        DirExec(dbCon, 1, "drop table t1");
-        DirExec(dbCon, 0, "create table t1 ( c1 int, c2 char(20) ) ");
-        DirExec(dbCon, 0, "insert into t1 values( 1, 'val-1' )");
-        DirExec(dbCon, 0, "insert into t1 values( 2, 'val-2' )");
-        DirExec(dbCon, 0, "insert into t1 values( 3, 'val-3' )");
-        DirExec(dbCon, 0, "insert into t1 values( 4, 'val-4' )");
-        DirExec(dbCon, 0, "insert into t1 values( 5, 'val-5' )");
+        this.DirExec(dbCon, 1, "drop table t1");
+        this.DirExec(dbCon, 0, "create table t1 ( c1 int, c2 char(20) ) ");
+        this.DirExec(dbCon, 0, "insert into t1 values( 1, 'val-1' )");
+        this.DirExec(dbCon, 0, "insert into t1 values( 2, 'val-2' )");
+        this.DirExec(dbCon, 0, "insert into t1 values( 3, 'val-3' )");
+        this.DirExec(dbCon, 0, "insert into t1 values( 4, 'val-4' )");
+        this.DirExec(dbCon, 0, "insert into t1 values( 5, 'val-5' )");
 
         console.log();
         console.log(" --- SELECT * FROM t1 ------ ");
@@ -45,14 +42,14 @@ class CBasicTest
         console.log(rows);
     };
 
-    RunTest1(ConStr, drda=false)
+    RunTest1(ConStr, drda = false)
     {
 
         console.log(" --- Executing SqliBasicTest ....");
         var dbCon;
         try
         {
-            if( drda )
+            if (drda)
             {
                 // This is for DRDA
                 dbCon = null;
@@ -68,7 +65,7 @@ class CBasicTest
             return;
         }
 
-        DoSomeWork(dbCon);
+        this.DoSomeWork(dbCon);
 
         try
         {
@@ -88,42 +85,85 @@ class CBasicTest
 
 function main()
 {
-
-
     var mTest = new CBasicTest();
 
     conInfo =
+        {
+            myHost: "ec2-52-207-237-201.compute-1.amazonaws.com",
+            myServer: "ol_aws",
+            myDb: "db1",
+            myUser: "dbuser1",
+            myPwd: "mypwd123",
+
+            ///////// SQLI /////////
+            sqliPort: 9088,
+            sslPort: 9089,
+            sqliProto: "onsoctcp",
+            sslProto: "olsocssl",
+
+            //////// DRDA //////////
+            drdaPort: 9090,
+            drda_sslPort: 9091,
+            drdaProto: "onsoctcp",
+            drda_sslProto: "olsocssl"
+
+            /////// Mongo 27017  27018
+            /////// HTTP/REST  26001 26002
+        };
+
+    ////////////////////////////////////////////////
+    const Connectivitys =
     {
-        myHost : "ec2-52-207-237-201.compute-1.amazonaws.com",
-        myServer :  "ol_aws",
-        myDb: "db1",
-        myUser: "dbuser1",
-        myPwd: "mypwd123",
-
-        //////////////////
-        sqliPort: 9088,
-        sslPort:9089,
-        sqliProto: "onsoctcp",
-        sslProto: "olsocssl"
-    };
-
-
-    ////////////////////////////////////////////////
-const Connectivitys = {
-    SQLI: 'sqli',
-    SQLI_SSL: 'sqli_ssl',
-    DRDA: 'drda',
-    DRDA_SSL: 'drda_ssl'
-}
-
-
-
+        SQLI: 'sqli',
+        SQLI_SSL: 'sqli_ssl',
+        DRDA: 'drda',
+        DRDA_SSL: 'drda_ssl'
+    }
 
     ////////////////////////////////////////////////
 
-    var ConnStr  =  "SERVER=ids0;DATABASE=db1;HOST=127.0.0.1;SERVICE=9088;PROTOCOL=onsoctcp;UID=informix;PWD=xxxx;";
-    var sslConStr = 'HOST={myHost};SERVER={myServer}; SERVICE={sslPort}; PROTOCOL={sslProto}; DATABASE={myDb};UID={myUser};PWD={myPwd};CLIENT_LOCALE=en_us.8859-1;DB_LOCALE=en_us.utf8';
-    var sqliConStr = 'HOST={myHost};SERVER={myServer};SERVICE={sqliPort};PROTOCOL={sqliProto};DATABASE={myDb};UID={myUser};PWD={myPwd};CLIENT_LOCALE=en_us.8859-1;DB_LOCALE=en_us.utf8';
+    // var ConnStr  =  "SERVER=ids0;DATABASE=db1;HOST=127.0.0.1;SERVICE=9088;PROTOCOL=onsoctcp;UID=informix;PWD=xxxx;";
+    // var ConnStr0 = 'HOST=%s;SERVER=%s;SERVICE=%i;PROTOCOL=%s;DATABASE=%s;UID=%s;PWD=%s;CLIENT_LOCALE=en_us.8859-1;DB_LOCALE=en_us.utf8';
+    var ConnStr0 = 'HOST=%s;SERVER=%s;SERVICE=%i;PROTOCOL=%s;DATABASE=%s;UID=%s;PWD=%s';
+
+
+    const ConnStr_sqli = util.format(ConnStr0,
+        conInfo.myHost,
+        conInfo.myServer,
+        conInfo.sqliPort,
+        conInfo.sqliProto,
+        conInfo.myDb,
+        conInfo.myUser,
+        conInfo.myPwd);
+
+    const ConnStr_sqli_ssl = util.format(ConnStr0,
+        conInfo.myHost,
+        conInfo.myServer,
+        conInfo.sslPort,
+        conInfo.sslProto,
+        conInfo.myDb,
+        conInfo.myUser,
+        conInfo.myPwd);
+
+    const ConnStr_drda = util.format(ConnStr0,
+        conInfo.myHost,
+        conInfo.myServer,
+        conInfo.drdaPort,
+        conInfo.drdaProto,
+        conInfo.myDb,
+        conInfo.myUser,
+        conInfo.myPwd);
+
+
+    const ConnStr_drda_ssl = util.format(ConnStr0,
+        conInfo.myHost,
+        conInfo.myServer,
+        conInfo.drda_sslPort,
+        conInfo.drda_sslProto,
+        conInfo.myDb,
+        conInfo.myUser,
+        conInfo.myPwd);
+
 
 
     for (let item in Connectivitys)
@@ -131,34 +171,47 @@ const Connectivitys = {
         isDrda = false;
         let ConnType = Connectivitys[item];
 
-        switch (ConnType)
+        if (ConnType == Connectivitys.SQLI)
         {
-            case Connectivitys.SQLI:
-                isDrda = false;
-                ConnStr = format(sqliConStr, conInfo);
-                // mTest.RunTest1(SqliConStr, isDrda);
-                break;
+            console.log("SQLI :");
+            isDrda = false;
+            ConnStr = ConnStr_sqli;
 
-            case Connectivitys.SQLI_SSL:
-                isDrda = false;
-                ConnStr = format(sslConStr, conInfo);
-                // mTest.RunTest1(SqliConStr, isDrda);
-                break;
+            console.log(ConnStr);
+            mTest.RunTest1(ConnStr, isDrda);
 
-
-            case Connectivitys.DRDA:
-                isDrda = true;
-                ConnStr = " Connection string for DRDA"
-                // mTest.RunTest1(SqliConStr, isDrda);
-                break;
-
-            case Connectivitys.DRDA_SSL:
-                isDrda = true;
-                ConnStr = " Connection string for DRDA SSL"
-                // mTest.RunTest1(SqliConStr, isDrda);
-                break;
         }
-        console.log(ConnStr);
+
+        if (ConnType == Connectivitys.SQLI_SSL)
+        {
+            console.log("SQLI_SSL : ");
+            isDrda = false;
+            ConnStr = ConnStr_sqli_ssl;
+
+            console.log(ConnStr);
+            //mTest.RunTest1(ConnStr, isDrda);
+        }
+
+        if (ConnType == Connectivitys.DRDA)
+        {
+            console.log("DRDA : ");
+            isDrda = true;
+            ConnStr = ConnStr_drda;
+
+            console.log(ConnStr);
+            //mTest.RunTest1(ConnStr, isDrda);
+        }
+
+        if (ConnType == Connectivitys.DRDA_SSL)
+        {
+            console.log("DRDA_SSL : ");
+            isDrda = true;
+            ConnStr = ConnStr_drda_ssl;
+
+            console.log(ConnStr);
+            //mTest.RunTest1(ConnStr, isDrda);
+        }
+
     }
 
 }

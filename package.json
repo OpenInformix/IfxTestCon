@@ -11,9 +11,8 @@
     "url": "https://github.com/OpenInformix/testconn.git"
   },
   "dependencies": {
-    "ifxnjs": "~8.0.0",
-    "q": "~1.5.1",
-    "string-template": "^1.0.0"
+    "ifxnjs": "^8.0.1",
+    "q": "^1.5.1"
   },
   "keywords": [
     "node",
